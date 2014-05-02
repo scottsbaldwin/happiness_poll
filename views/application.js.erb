@@ -1,0 +1,76 @@
+function defaultState() {
+    return {participants: [], votes: {}};
+}
+
+var scheme   = "<%= @scheme %>";
+var pollName = '<%= @uuid %>';
+var uri      = scheme + window.document.location.host + "/" + pollName;
+var ws       = new WebSocket(uri);
+var state    = defaultState();
+var myId     = null;
+
+ws.onmessage = function(message) {
+  var msg = JSON.parse(message.data);
+  var topic = msg.topic;
+  var payload = msg.payload;
+  if (topic == 'joined' || topic == 'voted' || topic == 'exit') {
+      state = payload;
+      updateAverages();
+  } else if (topic == 'id') {
+      myId = payload.id;
+  }
+};
+
+function createMessage(topic, data) {
+    return JSON.stringify({topic: topic, payload: data});
+}
+
+function getUserHangoutId() {
+  return myId;
+}
+
+function getState() {
+  return state;
+}
+
+function vote(score) {
+  $('.your-vote').html(score);
+  ws.send(createMessage('vote', {voter: getUserHangoutId(), vote: score}));
+}
+
+function updateAverages() {
+  var state = getState();
+  var set = [];
+  for (p in state.votes) {
+    set.push(state.votes[p]-0);
+  }
+  var avg = average(set);
+  $('.team-average').html(avg);
+  updateParticipants();
+}
+
+function updateParticipants() {
+  var state = getState();
+  var participants = state.participants;
+  var nrVoting = Object.keys(state.votes).length;
+  $('.nr-voting').html(nrVoting);
+  $('.nr-participants').html(participants.length);
+}
+
+function average(set) {
+  var sum = 0;
+  for(var i=0;i<set.length;i++) {
+    sum += set[i];
+  }
+  var avg = 0;
+  if (set.length > 0) {
+    avg = sum / set.length;
+  }
+  return avg.toFixed(1);
+}
+
+$(document).ready(function() {
+    $('.btn-group .btn').click(function() {
+      vote($(this).val());
+    });
+});

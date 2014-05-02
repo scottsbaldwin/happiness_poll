@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happiness Poll</title>
+    <link href="assets/css/application.css" rel="stylesheet" media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="assets/js/jquery-2.0.3.min.js"></script>
+    <style>
+    html, body {
+      height: 100%;
+      background-color: #333;
+    }
+    body {
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+      box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="page-header">
+    <h2>Happiness <small>the object and design of our existence</small></h2>
+  </div>
+  <p>
+      <button id="start" type="button" class="btn btn-lg btn-success">Capture Your Team's Happiness!</button>
+  </p>
+</div>
+<script>
+$(document).ready(function() {
+   $('#start').click(function() {
+      location.href = '/<%= SecureRandom.uuid %>'; 
+   });
+});
+</script>
+</body>
+</html>

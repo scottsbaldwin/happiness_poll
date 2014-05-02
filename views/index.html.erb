@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happiness Poll</title>
+    <link href="assets/css/application.css" rel="stylesheet" media="screen">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="assets/js/jquery-2.0.3.min.js"></script>
+    <style>
+    html, body {
+      height: 100%;
+      background-color: #333;
+    }
+    body {
+      color: #fff;
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+      box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+    }
+    </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="page-header">
+    <h2>Happiness <small>the object and design of our existence</small></h2>
+  </div>
+
+  <div class="btn-group btn-group-lg">
+    <button type="button" value="0" class="btn btn-danger">miserable</button>
+    <button type="button" value="1" class="btn btn-warning">1</button>
+    <button type="button" value="2" class="btn btn-warning">2</button>
+    <button type="button" value="3" class="btn btn-warning">3</button>
+    <button type="button" value="4" class="btn btn-warning">4</button>
+    <button type="button" value="5" class="btn btn-warning">5</button>
+    <button type="button" value="6" class="btn btn-info">6</button>
+    <button type="button" value="7" class="btn btn-info">7</button>
+    <button type="button" value="8" class="btn btn-info">8</button>
+    <button type="button" value="9" class="btn btn-info">9</button>
+    <button type="button" value="10" class="btn btn-success">well-chuffed</button>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-4 lead">
+        <h3>You</h3>
+      </div>
+      <div class="col-sm-2 lead text-center">
+        <h3 class="your-vote">?</h3>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-4 lead">
+        <h3>Team <small><span class="nr-voting">0</span> vote(s) from <span class="nr-participants">0</span> participant(s)</small></h3>
+      </div>
+      <div class="col-sm-2 lead text-center">
+        <h3 class="team-average">?</h3>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
+  </div>
+
+  <p class="text-center">Invite others by sharing this link:<br/><a href="<%= request.url %>"><%= request.url %></a></p>
+  <p><a href="/" class="btn btn-sm btn-success">Start a new poll</a></p>
+
+</div>
+
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="assets/js/application.js?name=<%= @uuid %>"></script>
+
+</body>
+</html>
