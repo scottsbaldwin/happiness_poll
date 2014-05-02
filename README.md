@@ -1,7 +1,7 @@
 Happiness Poll
 ==============
 
-Measure the happiness of your team with this polling site.
+Measure the happiness of your team with this polling site! Take a test drive at http://happiness-poll.herokuapp.com/.
 
 To setup:
 
