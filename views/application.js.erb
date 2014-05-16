@@ -39,14 +39,20 @@ function vote(score) {
 }
 
 function updateAverages() {
+  var set = getVotesFromState();
+  var avg = average(set);
+  $('.team-average').html(avg);
+  updateParticipants();
+  showVoteBreakdown();
+}
+
+function getVotesFromState() {
   var state = getState();
   var set = [];
   for (p in state.votes) {
     set.push(state.votes[p]-0);
   }
-  var avg = average(set);
-  $('.team-average').html(avg);
-  updateParticipants();
+  return set;
 }
 
 function updateParticipants() {
@@ -68,6 +74,52 @@ function average(set) {
   }
   return avg.toFixed(1);
 }
+
+// ------------------------------------
+// Histogram chart setup
+// ------------------------------------
+
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(showVoteBreakdown);
+
+function showVoteBreakdown() {
+  var scores = getVotesFromState();
+  if (scores.length < 2) {
+    return;
+  }
+
+  var table = [['Voter', 'Score']];
+
+  for(var i=0;i<scores.length;i++) {
+    table.push(['Person ' + (i+1), scores[i]]);
+  }
+
+  var data = google.visualization.arrayToDataTable(table);
+
+  var options = {
+    histogram: { bucketSize: 1 },
+    legend: { position: 'none' },
+    backgroundColor: '#333',
+    width: '100%',
+    hAxis: {
+      textStyle: { color: '#fff' },
+      gridlines: { count: -1, color: '#666' },
+    },
+    vAxis: {
+      textStyle: { color: '#fff' },
+      gridlines: { count: -1, color: '#333' },
+      textPosition: 'none',
+    },
+    colors: ['#5bc0de', '#2a6496'],
+  };
+
+  var chart = new google.visualization.Histogram(document.getElementById('histogram'));
+  chart.draw(data, options);
+}
+
+// ------------------------------------
+// Initialize
+// ------------------------------------
 
 $(document).ready(function() {
     $('.btn-group .btn').click(function() {

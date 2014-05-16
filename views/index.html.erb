@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript" src="assets/js/jquery-2.0.3.min.js"></script>
     <style>
     html, body {
@@ -63,7 +64,16 @@
       </div>
       <div class="col-sm-3"></div>
     </div>
+
+    <div class="row">
+      <div class="col-sm-3"></div>
+      <div class="col-sm-6 lead">
+        <div id="histogram"></div>
+      </div>
+      <div class="col-sm-3"></div>
+    </div>
   </div>
+
 
   <p class="text-center">Invite others by sharing this link:<br/><a href="<%= request.url %>"><%= request.url %></a></p>
   <p><a href="/" class="btn btn-sm btn-success">Start a new poll</a></p>
