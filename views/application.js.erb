@@ -85,7 +85,10 @@ google.setOnLoadCallback(showVoteBreakdown);
 function showVoteBreakdown() {
   var scores = getVotesFromState();
   if (scores.length < 2) {
+    $('#histogram').hide();
     return;
+  } else {
+    $('#histogram').show();
   }
 
   var table = [['Voter', 'Score']];
