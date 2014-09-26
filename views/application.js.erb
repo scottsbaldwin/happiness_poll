@@ -33,34 +33,39 @@ function getState() {
   return state;
 }
 
-function vote(score) {
-  $('.your-vote').html(score);
-  ws.send(createMessage('vote', {voter: getUserHangoutId(), vote: score}));
+function vote(score, voteType) {
+  $('.' + voteType + ' .btn').removeClass('active');
+  $('.' + voteType + ' .btn[value=' + score + ']').addClass('active');
+  ws.send(createMessage('vote', {voter: getUserHangoutId(), vote: score, voteType: voteType}));
 }
 
 function updateAverages() {
-  var set = getVotesFromState();
-  var avg = average(set);
-  $('.team-average').html(avg);
-  updateParticipants();
+  $.each(['happiness', 'hopefulness'], function(i, voteType) {
+    var set = getVotesFromState(voteType);
+    var avg = average(set);
+    $('.' + voteType + ' .team-average').html(avg);
+    updateParticipants(voteType);
+  });
   showVoteBreakdown();
 }
 
-function getVotesFromState() {
+function getVotesFromState(voteType) {
   var state = getState();
   var set = [];
-  for (p in state.votes) {
-    set.push(state.votes[p]-0);
+  if (state.votes[voteType]) {
+    for (p in state.votes[voteType]) {
+      set.push(state.votes[voteType][p]-0);
+    }
   }
   return set;
 }
 
-function updateParticipants() {
+function updateParticipants(voteType) {
   var state = getState();
   var participants = state.participants;
-  var nrVoting = Object.keys(state.votes).length;
-  $('.nr-voting').html(nrVoting);
-  $('.nr-participants').html(participants.length);
+  var nrVoting = state.votes[voteType] ? Object.keys(state.votes[voteType]).length : 0;
+  $('.' + voteType + ' .nr-voting').html(nrVoting);
+  $('.' + voteType + ' .nr-participants').html(participants.length);
 }
 
 function average(set) {
@@ -83,41 +88,45 @@ google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(showVoteBreakdown);
 
 function showVoteBreakdown() {
-  var scores = getVotesFromState();
-  if (scores.length < 2) {
-    $('#histogram').hide();
-    return;
-  } else {
-    $('#histogram').show();
-  }
+  $.each(['happiness', 'hopefulness'], function(i, voteType) {
+    var state = getState();
+    var scores = getVotesFromState(voteType);
+    var participants = state.participants;
+    if (participants.length < 2 || scores.length < 2) {
+      $('.' + voteType + ' #' + voteType + '_histogram').hide();
+      return;
+    } else {
+      $('.' + voteType + ' #' + voteType + '_histogram').show();
+    }
 
-  var table = [['Voter', 'Score']];
+    var table = [['Voter', 'Score']];
 
-  for(var i=0;i<scores.length;i++) {
-    table.push(['Person ' + (i+1), scores[i]]);
-  }
+    for(var i=0;i<scores.length;i++) {
+      table.push(['Person ' + (i+1), scores[i]]);
+    }
 
-  var data = google.visualization.arrayToDataTable(table);
+    var data = google.visualization.arrayToDataTable(table);
 
-  var options = {
-    histogram: { bucketSize: 1 },
-    legend: { position: 'none' },
-    backgroundColor: '#333',
-    width: '100%',
-    hAxis: {
-      textStyle: { color: '#fff' },
-      gridlines: { count: -1, color: '#666' },
-    },
-    vAxis: {
-      textStyle: { color: '#fff' },
-      gridlines: { count: -1, color: '#333' },
-      textPosition: 'none',
-    },
-    colors: ['#5bc0de', '#2a6496'],
-  };
+    var options = {
+      histogram: { bucketSize: 1 },
+      legend: { position: 'none' },
+      backgroundColor: '#333',
+      width: '100%',
+      hAxis: {
+        textStyle: { color: '#fff' },
+        gridlines: { count: -1, color: '#666' },
+      },
+      vAxis: {
+        textStyle: { color: '#fff' },
+        gridlines: { count: -1, color: '#333' },
+        textPosition: 'none',
+      },
+      colors: ['#5bc0de', '#2a6496'],
+    };
 
-  var chart = new google.visualization.Histogram(document.getElementById('histogram'));
-  chart.draw(data, options);
+    var chart = new google.visualization.Histogram(document.getElementById(voteType + '_histogram'));
+    chart.draw(data, options);
+  });
 }
 
 // ------------------------------------
@@ -125,7 +134,10 @@ function showVoteBreakdown() {
 // ------------------------------------
 
 $(document).ready(function() {
-    $('.btn-group .btn').click(function() {
-      vote($(this).val());
+    $('.happiness .btn-group .btn').click(function() {
+      vote($(this).val(), 'happiness');
+    });
+    $('.hopefulness .btn-group .btn').click(function() {
+      vote($(this).val(), 'hopefulness');
     });
 });
