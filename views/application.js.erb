@@ -16,6 +16,8 @@ ws.onmessage = function(message) {
   if (topic == 'joined' || topic == 'voted' || topic == 'exit') {
       state = payload;
       updateAverages();
+  } else if (topic == 'chatted') {
+    logChatMessage(payload);
   } else if (topic == 'id') {
       myId = payload.id;
   }
@@ -31,6 +33,26 @@ function getUserHangoutId() {
 
 function getState() {
   return state;
+}
+
+function chat(message) {
+  ws.send(createMessage('chat', {author: getUserHangoutId(), message: message, date: new Date()}));
+}
+
+function logChatMessage(payload) {
+    var logClass = '.conversation-log';
+    $('.conversation-list').append('<li><h4><small>' + payload.message + ' (' + formatDate(payload.date) + ')</small></h4></li>');
+    $(logClass).animate({ scrollTop: $(logClass)[0].scrollHeight }, 1000);
+}
+
+function formatDate(dateStr) {
+  var d = new Date(dateStr);
+  var day = d.getDate();
+  var mon =  d.getMonth() + 1;
+  var hour = d.getHours();
+  var min = d.getMinutes();
+  min = min < 10 ? '0' + min : min;
+  return mon + '/' + day + ' ' + hour + ':' + min;
 }
 
 function vote(score, voteType) {
@@ -132,12 +154,21 @@ function showVoteBreakdown() {
 // ------------------------------------
 // Initialize
 // ------------------------------------
-
 $(document).ready(function() {
     $('.happiness .btn-group .btn').click(function() {
       vote($(this).val(), 'happiness');
     });
     $('.hopefulness .btn-group .btn').click(function() {
       vote($(this).val(), 'hopefulness');
+    });
+    $('.conversation .btn').click(function() {
+      var comment = $('#anonymousComment');
+      chat(comment.val());
+      comment.val('');
+    });
+    $('#anonymousComment').bind('keypress',function (event){
+      if (event.keyCode === 13){
+        $('.conversation .btn').trigger('click');
+      }
     });
 });

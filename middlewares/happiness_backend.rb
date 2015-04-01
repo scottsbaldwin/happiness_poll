@@ -29,6 +29,9 @@ module HappinessPoll
             payload = message['payload']
             add_vote_to_scope(payload['voter'], payload['vote'], payload['voteType'], scope)
             send_message_to_scope(create_message('voted', state_for_scope(scope)), scope)
+          elsif (message['topic'] == 'chat')
+            payload = message['payload']
+            send_message_to_scope(create_message('chatted', payload), scope)
           end
         end
 

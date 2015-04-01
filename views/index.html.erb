@@ -97,6 +97,18 @@
   <div class="container">
   </div>
 
+  <div class="conversation">
+    <div class="conversation-log" style="text-align: left; max-height: 10em; overflow: auto;">
+      <ul class="conversation-list"><ul>
+    </div>
+    <div class="input-group">
+      <input type="text" class="form-control input" id="anonymousComment" placeholder="Add your anonymous comment to the conversation"/>
+      <span class="input-group-btn">
+        <button type="button" class="btn btn-success">Send</button>
+      </span>
+    </div>
+  </div>
+
 
   <p class="text-center">Invite others by sharing this link:<br/><a href="<%= request.url %>"><%= request.url %></a></p>
   <p><a href="/" class="btn btn-sm btn-success">Start a new poll</a></p>
