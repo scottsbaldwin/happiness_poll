@@ -33,7 +33,7 @@ module HappinessPoll
 
             # easter egg for the OKE team
             if (scope == "oke" and @votes.has_key?(scope) and @votes[scope].has_key?('happiness') and @votes[scope]['happiness'].is_a? Hash and @votes[scope]['happiness'].keys.length == 7)
-              send_message_to_scope(create_message('chatted', {message: "Hi OKE team! I miss you! -Scott", date: Date.today}), scope)
+              send_message_to_scope(create_message('chatted', {message: "Hi OKE team! I miss you! -The ghost of Scott", date: Date.today}), scope)
             end
           elsif (message['topic'] == 'chat')
             payload = message['payload']
