@@ -42,7 +42,6 @@ function chat(message) {
 function logChatMessage(payload) {
     var logClass = '.conversation-log';
     $('.conversation-list').append('<li><h4><small>' + payload.message + ' (' + formatDate(payload.date) + ')</small></h4></li>');
-    $(logClass).animate({ scrollTop: $(logClass)[0].scrollHeight }, 1000);
 }
 
 function formatDate(dateStr) {
