@@ -9,6 +9,11 @@ var ws       = new WebSocket(uri);
 var state    = defaultState();
 var myId     = null;
 
+var airbrake = new Airbrake.Notifier({
+  projectId: "<%= @ab_project_id %>",
+  projectKey: "<%= @ab_project_key %>",
+});
+
 ws.onmessage = function(message) {
   var msg = JSON.parse(message.data);
   var topic = msg.topic;
