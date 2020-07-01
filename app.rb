@@ -15,7 +15,7 @@ module HappinessPoll
     get "/assets/js/application.js" do
       content_type :js
       @uuid = request.params['name'] || SecureRandom.uuid
-      @scheme = ENV['RACK_ENV'] == "production" ? "wss://" : "ws://"
+      @scheme = ["production", "staging"].include?(ENV['RACK_ENV']) ? "wss://" : "ws://"
       @ab_project_id = ENV['AIRBRAKE_PROJECT_ID']
       @ab_project_key = ENV['AIRBRAKE_PROJECT_KEY']
       erb :"application.js"
