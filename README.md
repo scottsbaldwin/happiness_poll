@@ -6,8 +6,23 @@ Measure the happiness of your team with this polling site! Take a test drive at 
 Local Setup
 -----
 
+Clone the repository.
+
 ```
 git clone git@github.com:scottsbaldwin/happiness_poll.git
+```
+
+Create a file called `airbrake.env` and populate the Airbrake variables.
+
+```
+export AIRBRAKE_PROJECT_ID=
+export AIRBRAKE_PROJECT_KEY=
+```
+
+Source the env file and startup the application.
+
+```
+source airbrake.env
 bundle install
 export PORT=5000
 foreman start web
