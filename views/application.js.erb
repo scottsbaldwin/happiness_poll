@@ -81,7 +81,7 @@ function getVotesFromState(voteType) {
   var set = [];
   if (state.votes[voteType]) {
     for (p in state.votes[voteType]) {
-      set.push(state.votes[voteType][p]-0);
+      set.push(Number(state.votes[voteType][p]-0));
     }
   }
   return set;
@@ -115,7 +115,7 @@ google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(showVoteBreakdown);
 
 function showVoteBreakdown() {
-  $.each(['happiness', 'hopefulness'], function(i, voteType) {
+  $.each(['happiness', 'hopefulness'], function (i, voteType) {
     var state = getState();
     var scores = getVotesFromState(voteType);
     var participants = state.participants;
@@ -126,13 +126,31 @@ function showVoteBreakdown() {
       $('.' + voteType + ' #' + voteType + '_histogram').show();
     }
 
-    var table = [['Voter', 'Score']];
-
-    for(var i=0;i<scores.length;i++) {
-      table.push(['Person ' + (i+1), scores[i]]);
+    if (scores.length === 0) {
+      // No votes for this category, so no need to create the chart.
+      return;
     }
 
-    var data = google.visualization.arrayToDataTable(table);
+    var data = new google.visualization.DataTable();
+    data.addColumn('number', 'Score');
+    data.addColumn('number', 'Count');
+
+    var scoreCounts = {};
+
+    for (var i = 0; i < scores.length; i++) {
+      var score = scores[i];
+      if (scoreCounts[score] === undefined) {
+        scoreCounts[score] = 1;
+      } else {
+        scoreCounts[score]++;
+      }
+    }
+
+    var scoreValues = Object.keys(scoreCounts).map(function (score) {
+      return [parseInt(score), scoreCounts[score]];
+    });
+
+    data.addRows(scoreValues);
 
     var options = {
       histogram: { bucketSize: 1 },
